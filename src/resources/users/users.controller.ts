@@ -19,9 +19,7 @@ export class UsersController {
   @Post()
   async create(@Body() dto: CreateUserRequestDto) {
     const created = await this.usersService.create(dto);
-    return plainToInstance(CreateUserResponseDto, created, {
-      excludeExtraneousValues: true,
-    });
+    return plainToInstance(CreateUserResponseDto, created);
   }
 
   // @Get()
