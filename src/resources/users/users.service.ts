@@ -11,6 +11,7 @@ import { plainToInstance } from 'class-transformer';
 import { CreateUserResponseDto } from './dto/response/create-user.response.dto';
 import * as bcrypt from 'bcrypt';
 import { UpdateUserRequestDto } from './dto/request/update-user.request.dto';
+import { UpdateUserResponseDto } from './dto/response/update-user.response.dto';
 
 @Injectable()
 export class UsersService {
@@ -50,6 +51,10 @@ export class UsersService {
   async findOne(id: string): Promise<CreateUserResponseDto> {
     const user = await this.userRepository.findOneBy({ id });
 
+    if (!user) {
+      throw new NotFoundException('Usuário não encontrado.');
+    }
+
     return plainToInstance(CreateUserResponseDto, user, {
       excludeExtraneousValues: true,
     });
@@ -58,10 +63,10 @@ export class UsersService {
   async update(
     id: string,
     dto: UpdateUserRequestDto,
-  ): Promise<UpdateUserRequestDto> {
+  ): Promise<UpdateUserResponseDto> {
     const user = await this.userRepository.findOneBy({ id });
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException('Usuário não encontrado.');
     }
 
     if (dto.email && dto.email !== user.email) {
@@ -83,15 +88,15 @@ export class UsersService {
     }
 
     const updatedUser = await this.userRepository.save(user);
-    return plainToInstance(UpdateUserRequestDto, updatedUser, {
+    return plainToInstance(UpdateUserResponseDto, updatedUser, {
       excludeExtraneousValues: true,
     });
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: string): Promise<void> {
     const result = await this.userRepository.delete(id);
     if (result.affected === 0) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException('Usuário não encontrado.');
     }
   }
 }

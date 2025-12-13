@@ -1,16 +1,3 @@
-import { Expose } from 'class-transformer';
+import { UserResponseDto } from './user.response.dto';
 
-export class UpdateUserResponseDto {
-  @Expose()
-  id: string;
-
-  @Expose()
-  name: string;
-
-  @Expose()
-  email: string;
-
-  constructor(partial: Partial<UpdateUserResponseDto>) {
-    Object.assign(this, partial);
-  }
-}
+export class UpdateUserResponseDto extends UserResponseDto {}

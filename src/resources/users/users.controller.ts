@@ -6,39 +6,51 @@ import {
   Patch,
   Param,
   Delete,
+  HttpCode,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserRequestDto } from './dto/request/create-user.request.dto';
 import { plainToInstance } from 'class-transformer';
 import { CreateUserResponseDto } from './dto/response/create-user.response.dto';
+import { UpdateUserRequestDto } from './dto/request/update-user.request.dto';
+import { UserResponseDto } from './dto/response/user.response.dto';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  async create(@Body() dto: CreateUserRequestDto) {
+  @HttpCode(201)
+  async create(
+    @Body() dto: CreateUserRequestDto,
+  ): Promise<CreateUserResponseDto> {
     const created = await this.usersService.create(dto);
     return plainToInstance(CreateUserResponseDto, created);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.usersService.findAll();
-  // }
+  @Get()
+  @HttpCode(200)
+  async findAll(): Promise<UserResponseDto[]> {
+    return await this.usersService.findAll();
+  }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.usersService.findOne(id);
-  // }
+  @HttpCode(200)
+  @Get(':id')
+  async findById(@Param('id') id: string): Promise<UserResponseDto> {
+    return await this.usersService.findOne(id);
+  }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-  //   return this.usersService.update(id, updateUserDto);
-  // }
+  @Patch(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() dto: UpdateUserRequestDto,
+  ): Promise<UserResponseDto> {
+    return await this.usersService.update(id, dto);
+  }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.usersService.remove(id);
-  // }
+  @Delete(':id')
+  @HttpCode(204)
+  async removeById(@Param('id') id: string): Promise<void> {
+    await this.usersService.remove(id);
+  }
 }
