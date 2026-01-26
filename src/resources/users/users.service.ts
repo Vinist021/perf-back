@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { CreateUserRequestDto } from './dto/request/create-user.request.dto';
 import { Repository } from 'typeorm';
-import { User } from './entities/user.entity';
+import { User } from '../../database/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToInstance } from 'class-transformer';
 import { CreateUserResponseDto } from './dto/response/create-user.response.dto';
