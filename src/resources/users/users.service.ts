@@ -12,6 +12,7 @@ import { CreateUserResponseDto } from './dto/response/create-user.response.dto';
 import * as bcrypt from 'bcrypt';
 import { UpdateUserRequestDto } from './dto/request/update-user.request.dto';
 import { UpdateUserResponseDto } from './dto/response/update-user.response.dto';
+import { UserResponseDto } from './dto/response/user.response.dto';
 
 @Injectable()
 export class UsersService {
@@ -40,24 +41,22 @@ export class UsersService {
     });
   }
 
-  async findAll(): Promise<CreateUserResponseDto[]> {
+  async findAll(): Promise<UserResponseDto[]> {
     const users = await this.userRepository.find();
 
-    return plainToInstance(CreateUserResponseDto, users, {
+    return plainToInstance(UserResponseDto, users, {
       excludeExtraneousValues: true,
     });
   }
 
-  async findOne(id: string): Promise<CreateUserResponseDto> {
-    const user = await this.userRepository.findOneBy({ id });
+  async findOne(email: string): Promise<User> {
+    const user = await this.userRepository.findOneBy({ email });
 
     if (!user) {
       throw new NotFoundException('Usuário não encontrado.');
     }
 
-    return plainToInstance(CreateUserResponseDto, user, {
-      excludeExtraneousValues: true,
-    });
+    return user;
   }
 
   async update(
