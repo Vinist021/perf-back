@@ -49,6 +49,7 @@ export class UsersService {
     });
   }
 
+  // keep findOne(email) for authentication usage
   async findOne(email: string): Promise<User> {
     const user = await this.userRepository.findOneBy({ email });
 
@@ -59,8 +60,20 @@ export class UsersService {
     return user;
   }
 
+  async findOneById(id: number): Promise<UserResponseDto> {
+    const user = await this.userRepository.findOneBy({ id });
+
+    if (!user) {
+      throw new NotFoundException('Usuário não encontrado.');
+    }
+
+    return plainToInstance(UserResponseDto, user, {
+      excludeExtraneousValues: true,
+    });
+  }
+
   async update(
-    id: string,
+    id: number,
     dto: UpdateUserRequestDto,
   ): Promise<UpdateUserResponseDto> {
     const user = await this.userRepository.findOneBy({ id });
@@ -92,7 +105,7 @@ export class UsersService {
     });
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: number): Promise<void> {
     const result = await this.userRepository.delete(id);
     if (result.affected === 0) {
       throw new NotFoundException('Usuário não encontrado.');
