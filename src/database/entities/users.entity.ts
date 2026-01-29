@@ -1,8 +1,9 @@
 import { Column, Entity } from 'typeorm';
 import { AbstractEntity } from './abstract-entity';
+import UserRole from '../enums/roleEnum';
 
 @Entity()
-export class User extends AbstractEntity {
+export class Users extends AbstractEntity {
   @Column()
   name: string;
 
@@ -11,4 +12,7 @@ export class User extends AbstractEntity {
 
   @Column()
   hashedPassword: string;
+
+  @Column({ default: UserRole.MEMBER })
+  role: UserRole;
 }

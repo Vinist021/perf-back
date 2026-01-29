@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { CreateUserRequestDto } from './dto/request/create-user.request.dto';
 import { Repository } from 'typeorm';
-import { User } from '../../database/entities/user.entity';
+import { Users } from '../../database/entities/users.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToInstance } from 'class-transformer';
 import { CreateUserResponseDto } from './dto/response/create-user.response.dto';
@@ -17,8 +17,8 @@ import { UserResponseDto } from './dto/response/user.response.dto';
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    @InjectRepository(Users)
+    private readonly userRepository: Repository<Users>,
   ) {}
 
   async create(dto: CreateUserRequestDto): Promise<CreateUserResponseDto> {
@@ -49,7 +49,7 @@ export class UsersService {
     });
   }
 
-  async findOne(email: string): Promise<User> {
+  async findOne(email: string): Promise<Users> {
     const user = await this.userRepository.findOneBy({ email });
 
     if (!user) {
