@@ -49,7 +49,6 @@ export class UsersService {
     });
   }
 
-  // keep findOne(email) for authentication usage
   async findOne(email: string): Promise<User> {
     const user = await this.userRepository.findOneBy({ email });
 
