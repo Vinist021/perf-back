@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { CardService } from './card.service';
 import { CreateCardRequestDTO } from './dto/request/create-card-request.dto';
+import { UpdateCardRequestDTO } from './dto/request/update-card-request.dto';
 
 @Controller('cards')
 export class CardController {
@@ -21,10 +22,10 @@ export class CardController {
     return this.cardService.findOne(+id);
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateCardDto: UpdateCardRequestDTO) {
-  //   return this.cardService.update(+id, updateCardDto);
-  // }
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() dto: UpdateCardRequestDTO) {
+    return this.cardService.update(+id, dto);
+  }
 
   // @Delete(':id')
   // remove(@Param('id') id: string) {

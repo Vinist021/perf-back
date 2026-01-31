@@ -1,9 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateCardRequestDTO } from './dto/request/create-card-request.dto';
 import { Card } from '../../database/entities/card.entity';
+import { CreateCardRequestDTO } from './dto/request/create-card-request.dto';
 import { UpdateCardRequestDTO } from './dto/request/update-card-request.dto';
+import { plainToInstance } from 'class-transformer';
+import { UpdateCardResponseDTO } from './dto/response/update-card-response.dto';
 
 @Injectable()
 export class CardService {
@@ -32,13 +34,21 @@ export class CardService {
     return card;
   }
 
-  // update(id: number, dto: UpdateCardRequestDTO) {
+  async update(id: number, dto: UpdateCardRequestDTO) {
+    const card = await this.cardRepository.preload({ id, ...dto });
 
-  //   const card = this.cardRepository.preload({
+    if (!card) {
+      throw new NotFoundException(`Card de id ${id} não encontrado`);
+    }
 
-  //   return ;
+    const saved = await this.cardRepository.save(card);
 
-  // // remove(id: number) {
-  // //   return `This action removes a #${id} card`;
-  // // }
+    return plainToInstance(UpdateCardResponseDTO, saved, {
+      excludeExtraneousValues: true,
+    });
+  }
+
+  remove(id: number) {
+    return `This action removes a #${id} card`;
+  }
 }
