@@ -9,7 +9,7 @@ export class Card extends AbstractEntity {
   @Column()
   author: string;
 
-  @Column({ nullable: true })
+  @Column('text', { array: true, nullable: true })
   hints: string[];
 
   @Column()

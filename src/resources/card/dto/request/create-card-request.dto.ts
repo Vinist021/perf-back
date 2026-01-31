@@ -6,6 +6,7 @@ export class CreateCardRequestDTO {
   @MaxLength(40, { message: 'Title must be at most 40 characters long' })
   type: string;
 
+  @IsString({ message: 'Author must be a string' })
   author: string;
 
   @IsArray({ message: 'Hints must be an array' })
