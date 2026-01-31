@@ -8,15 +8,16 @@ import {
   Delete,
 } from '@nestjs/common';
 import { CardService } from './card.service';
-import { CreateCardDto } from './dto/create-card.dto';
-import { UpdateCardDto } from './dto/update-card.dto';
+import { CreateCardRequestDTO } from './dto/request/create-card-request.dto';
+import { UpdateCardRequestDTO } from './dto/request/update-card-request.dto';
+
 
 @Controller('card')
 export class CardController {
   constructor(private readonly cardService: CardService) {}
 
   @Post()
-  create(@Body() createCardDto: CreateCardDto) {
+  create(@Body() createCardDto: CreateCardRequestDTO) {
     return this.cardService.create(createCardDto);
   }
 
@@ -31,7 +32,7 @@ export class CardController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCardDto: UpdateCardDto) {
+  update(@Param('id') id: string, @Body() updateCardDto: UpdateCardRequestDTO) {
     return this.cardService.update(+id, updateCardDto);
   }
 

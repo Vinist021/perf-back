@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCardDto } from './dto/create-card.dto';
-import { UpdateCardDto } from './dto/update-card.dto';
+import { CreateCardRequestDTO } from './dto/request/create-card-request.dto';
+import { UpdateCardRequestDTO } from './dto/request/update-card-request.dto';
 
 @Injectable()
 export class CardService {
-  create(createCardDto: CreateCardDto) {
+  create(createCardDto: CreateCardRequestDTO) {
     return 'This action adds a new card';
   }
 
@@ -16,7 +16,7 @@ export class CardService {
     return `This action returns a #${id} card`;
   }
 
-  update(id: number, updateCardDto: UpdateCardDto) {
+  update(id: number, updateCardDto: UpdateCardRequestDTO) {
     return `This action updates a #${id} card`;
   }
 
