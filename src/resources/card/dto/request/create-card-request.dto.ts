@@ -1,1 +1,19 @@
-export class CreateCardRequestDTO {}
+import { IsString, MaxLength, MinLength, IsArray } from 'class-validator';
+
+export class CreateCardRequestDTO {
+  @IsString({ message: 'Title must be a string' })
+  @MinLength(1, { message: 'Title must be at least 1 character long' })
+  @MaxLength(40, { message: 'Title must be at most 40 characters long' })
+  type: string;
+
+  author: string;
+
+  @IsArray({ message: 'Hints must be an array' })
+  @IsString({ each: true, message: 'Each hint must be a string' })
+  hints: string[];
+
+  @IsString({ message: 'Question must be a string' })
+  @MinLength(1, { message: 'Question must be at least 1 character long' })
+  @MaxLength(255, { message: 'Question must be at most 255 characters long' })
+  answer: string;
+}

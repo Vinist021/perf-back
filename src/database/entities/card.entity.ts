@@ -9,8 +9,8 @@ export class Card extends AbstractEntity {
   @Column()
   author: string;
 
-  @Column({ type: 'jsonb', nullable: true })
-  hints: JSON;
+  @Column({ nullable: true })
+  hints: string[];
 
   @Column()
   answer: string;
