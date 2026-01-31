@@ -6,6 +6,8 @@ import { CreateCardRequestDTO } from './dto/request/create-card-request.dto';
 import { UpdateCardRequestDTO } from './dto/request/update-card-request.dto';
 import { plainToInstance } from 'class-transformer';
 import { UpdateCardResponseDTO } from './dto/response/update-card-response.dto';
+import { CardResponseDTO } from './dto/response/card-response.dto';
+import { CreateCardResponseDTO } from './dto/response/create-card-response.dto';
 
 @Injectable()
 export class CardService {
@@ -14,14 +16,22 @@ export class CardService {
     private readonly cardRepository: Repository<Card>,
   ) {}
 
-  create(dto: CreateCardRequestDTO) {
+  async create(dto: CreateCardRequestDTO) {
     const card = this.cardRepository.create(dto);
 
-    return this.cardRepository.save(card);
+    const saved = await this.cardRepository.save(card);
+
+    return plainToInstance(CreateCardResponseDTO, saved, {
+      excludeExtraneousValues: true,
+    });
   }
 
-  findAll() {
-    return this.cardRepository.find();
+  async findAll() {
+    const card = await this.cardRepository.find();
+
+    return plainToInstance(CardResponseDTO, card, {
+      excludeExtraneousValues: true,
+    });
   }
 
   async findOne(id: number) {
@@ -31,14 +41,16 @@ export class CardService {
       throw new NotFoundException(`Card with ID ${id} not found`);
     }
 
-    return card;
+    return plainToInstance(CardResponseDTO, card, {
+      excludeExtraneousValues: true,
+    });
   }
 
   async update(id: number, dto: UpdateCardRequestDTO) {
     const card = await this.cardRepository.preload({ id, ...dto });
 
     if (!card) {
-      throw new NotFoundException(`Card de id ${id} não encontrado`);
+      throw new NotFoundException(`Card with ID ${id} not found`);
     }
 
     const saved = await this.cardRepository.save(card);

@@ -1,3 +1,3 @@
 import { CardResponseDTO } from './card-response.dto';
 
-export class UpdateCardResponseDTO extends CardResponseDTO {}
+export class CreateCardResponseDTO extends CardResponseDTO {}
