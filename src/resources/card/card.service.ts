@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateCardRequestDTO } from './dto/request/create-card-request.dto';
 import { Card } from '../../database/entities/card.entity';
+import { UpdateCardRequestDTO } from './dto/request/update-card-request.dto';
 
 @Injectable()
 export class CardService {
@@ -21,15 +22,23 @@ export class CardService {
     return this.cardRepository.find();
   }
 
-  findOne(id: number) {
-    return this.cardRepository.findOneBy({ id });
+  async findOne(id: number) {
+    const card = await this.cardRepository.findOneBy({ id });
+
+    if (!card) {
+      throw new NotFoundException(`Card with ID ${id} not found`);
+    }
+
+    return card;
   }
 
   // update(id: number, dto: UpdateCardRequestDTO) {
-  //   return `This action updates a #${id} card`;
-  // }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} card`;
-  // }
+  //   const card = this.cardRepository.preload({
+
+  //   return ;
+
+  // // remove(id: number) {
+  // //   return `This action removes a #${id} card`;
+  // // }
 }
