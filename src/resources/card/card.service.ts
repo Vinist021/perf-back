@@ -16,7 +16,7 @@ export class CardService {
     private readonly cardRepository: Repository<Card>,
   ) {}
 
-  async create(dto: CreateCardRequestDTO) {
+  async create(dto: CreateCardRequestDTO): Promise<CreateCardResponseDTO> {
     const card = this.cardRepository.create(dto);
 
     const saved = await this.cardRepository.save(card);
@@ -26,7 +26,7 @@ export class CardService {
     });
   }
 
-  async findAll() {
+  async findAll(): Promise<CardResponseDTO[]> {
     const card = await this.cardRepository.find();
 
     return plainToInstance(CardResponseDTO, card, {
@@ -34,7 +34,7 @@ export class CardService {
     });
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<CardResponseDTO> {
     const card = await this.cardRepository.findOneBy({ id });
 
     if (!card) {
@@ -46,7 +46,10 @@ export class CardService {
     });
   }
 
-  async update(id: number, dto: UpdateCardRequestDTO) {
+  async update(
+    id: number,
+    dto: UpdateCardRequestDTO,
+  ): Promise<UpdateCardResponseDTO> {
     const card = await this.cardRepository.preload({ id, ...dto });
 
     if (!card) {
