@@ -17,13 +17,13 @@ export class CardService {
     return this.cardRepository.save(card);
   }
 
-  // findAll() {
-  //   return `This action returns all card`;
-  // }
+  findAll() {
+    return this.cardRepository.find();
+  }
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} card`;
-  // }
+  findOne(id: number) {
+    return this.cardRepository.findOneBy({ id });
+  }
 
   // update(id: number, dto: UpdateCardRequestDTO) {
   //   return `This action updates a #${id} card`;

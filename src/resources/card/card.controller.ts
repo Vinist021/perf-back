@@ -1,25 +1,25 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CardService } from './card.service';
 import { CreateCardRequestDTO } from './dto/request/create-card-request.dto';
 
-@Controller('card')
+@Controller('cards')
 export class CardController {
   constructor(private readonly cardService: CardService) {}
 
   @Post()
-  create(@Body() createCardDto: CreateCardRequestDTO) {
-    return this.cardService.create(createCardDto);
+  create(@Body() dto: CreateCardRequestDTO) {
+    return this.cardService.create(dto);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.cardService.findAll();
-  // }
+  @Get()
+  findAll() {
+    return this.cardService.findAll();
+  }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.cardService.findOne(+id);
-  // }
+  @Get(':id')
+  findById(@Param('id') id: string) {
+    return this.cardService.findOne(+id);
+  }
 
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateCardDto: UpdateCardRequestDTO) {
