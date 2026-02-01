@@ -8,6 +8,7 @@ import { plainToInstance } from 'class-transformer';
 import { UpdateCardResponseDTO } from './dto/response/update-card-response.dto';
 import { CardResponseDTO } from './dto/response/card-response.dto';
 import { CreateCardResponseDTO } from './dto/response/create-card-response.dto';
+import { SuccessResponseDTO } from '../../shared/dtos/success-response.dto';
 
 @Injectable()
 export class CardService {
@@ -63,7 +64,7 @@ export class CardService {
     });
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: string): Promise<SuccessResponseDTO> {
     const card = await this.cardRepository.findOneBy({ id });
 
     if (!card) {
@@ -71,5 +72,9 @@ export class CardService {
     }
 
     await this.cardRepository.remove(card);
+
+    return new SuccessResponseDTO({
+      message: `Card successfully removed`,
+    });
   }
 }
