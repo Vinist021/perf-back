@@ -13,6 +13,7 @@ import * as bcrypt from 'bcrypt';
 import { UpdateUserRequestDto } from './dto/request/update-user.request.dto';
 import { UpdateUserResponseDto } from './dto/response/update-user.response.dto';
 import { UserResponseDto } from './dto/response/user.response.dto';
+import { SuccessResponseDTO } from '../../shared/dtos/success-response.dto';
 
 @Injectable()
 export class UsersService {
@@ -53,7 +54,7 @@ export class UsersService {
     const user = await this.userRepository.findOneBy({ email });
 
     if (!user) {
-      throw new NotFoundException('Usuário não encontrado.');
+      throw new NotFoundException('User not found');
     }
 
     return user;
@@ -63,7 +64,7 @@ export class UsersService {
     const user = await this.userRepository.findOneBy({ id });
 
     if (!user) {
-      throw new NotFoundException('Usuário não encontrado.');
+      throw new NotFoundException('User not found');
     }
 
     return plainToInstance(UserResponseDto, user, {
@@ -77,7 +78,7 @@ export class UsersService {
   ): Promise<UpdateUserResponseDto> {
     const user = await this.userRepository.findOneBy({ id });
     if (!user) {
-      throw new NotFoundException('Usuário não encontrado.');
+      throw new NotFoundException('User not found');
     }
 
     if (dto.email && dto.email !== user.email) {
@@ -85,7 +86,7 @@ export class UsersService {
         email: dto.email,
       });
       if (existing && existing.id !== id) {
-        throw new ConflictException('Já existe um usuário com este e-mail.');
+        throw new ConflictException('A user with this email already exists');
       }
       user.email = dto.email;
     }
@@ -104,10 +105,12 @@ export class UsersService {
     });
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: string): Promise<SuccessResponseDTO> {
     const result = await this.userRepository.delete(id);
     if (result.affected === 0) {
-      throw new NotFoundException('Usuário não encontrado.');
+      throw new NotFoundException('User not found');
     }
+
+    return new SuccessResponseDTO({ message: 'User successfully removed' });
   }
 }
