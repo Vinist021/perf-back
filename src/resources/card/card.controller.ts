@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   Patch,
   Post,
@@ -10,33 +11,77 @@ import {
 import { CardService } from './card.service';
 import { CreateCardRequestDTO } from './dto/request/create-card-request.dto';
 import { UpdateCardRequestDTO } from './dto/request/update-card-request.dto';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { CreateCardResponseDTO } from './dto/response/create-card-response.dto';
+import { CardResponseDTO } from './dto/response/card-response.dto';
+import { UpdateCardResponseDTO } from './dto/response/update-card-response.dto';
+import { SuccessResponseDTO } from '../../shared/dtos/success-response.dto';
 
+@ApiTags('cards')
 @Controller('cards')
 export class CardController {
   constructor(private readonly cardService: CardService) {}
 
+  @ApiOperation({ summary: 'Criar novo card' })
+  @ApiResponse({
+    status: 201,
+    description: 'Dados do novo card criado',
+    type: CreateCardResponseDTO,
+  })
+  @HttpCode(200)
   @Post()
-  create(@Body() dto: CreateCardRequestDTO) {
+  create(@Body() dto: CreateCardRequestDTO): Promise<CreateCardResponseDTO> {
     return this.cardService.create(dto);
   }
 
+  @ApiOperation({ summary: 'Listar todos os cards' })
+  @ApiResponse({
+    status: 200,
+    description: 'Dados dos cards',
+    type: CardResponseDTO,
+  })
+  @HttpCode(200)
   @Get()
-  findAll() {
+  findAll(): Promise<CardResponseDTO[]> {
     return this.cardService.findAll();
   }
 
+  @ApiOperation({ summary: 'Buscar dados de um card' })
+  @ApiResponse({
+    status: 200,
+    description: 'Dados do card',
+    type: CardResponseDTO,
+  })
+  @HttpCode(200)
   @Get(':id')
-  findById(@Param('id') id: string) {
+  findById(@Param('id') id: string): Promise<CardResponseDTO> {
     return this.cardService.findOne(id);
   }
 
+  @ApiOperation({ summary: 'Atualizar dados de um card' })
+  @ApiResponse({
+    status: 200,
+    description: 'Dados do card atualizado',
+    type: UpdateCardResponseDTO,
+  })
+  @HttpCode(200)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: UpdateCardRequestDTO) {
+  update(
+    @Param('id') id: string,
+    @Body() dto: UpdateCardRequestDTO,
+  ): Promise<UpdateCardResponseDTO> {
     return this.cardService.update(id, dto);
   }
 
+  @ApiOperation({ summary: 'Deletar card' })
+  @ApiResponse({
+    status: 200,
+    description: 'Mensagem de sucesso',
+    type: SuccessResponseDTO,
+  })
+  @HttpCode(200)
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: string): Promise<SuccessResponseDTO> {
     return this.cardService.remove(id);
   }
 }
