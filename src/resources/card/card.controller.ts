@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { CardService } from './card.service';
 import { CreateCardRequestDTO } from './dto/request/create-card-request.dto';
 import { UpdateCardRequestDTO } from './dto/request/update-card-request.dto';
@@ -27,8 +35,8 @@ export class CardController {
     return this.cardService.update(id, dto);
   }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.cardService.remove(id);
-  // }
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.cardService.remove(id);
+  }
 }

@@ -63,7 +63,13 @@ export class CardService {
     });
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} card`;
+  async remove(id: string): Promise<void> {
+    const card = await this.cardRepository.findOneBy({ id });
+
+    if (!card) {
+      throw new NotFoundException(`Card with ID ${id} not found`);
+    }
+
+    await this.cardRepository.remove(card);
   }
 }
