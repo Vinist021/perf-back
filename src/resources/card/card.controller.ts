@@ -19,16 +19,16 @@ export class CardController {
 
   @Get(':id')
   findById(@Param('id') id: string) {
-    return this.cardService.findOne(+id);
+    return this.cardService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() dto: UpdateCardRequestDTO) {
-    return this.cardService.update(+id, dto);
+    return this.cardService.update(id, dto);
   }
 
   // @Delete(':id')
   // remove(@Param('id') id: string) {
-  //   return this.cardService.remove(+id);
+  //   return this.cardService.remove(id);
   // }
 }

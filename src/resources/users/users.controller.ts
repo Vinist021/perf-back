@@ -1,19 +1,18 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
   HttpCode,
+  Param,
+  Patch,
+  Post,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
 import { CreateUserRequestDto } from './dto/request/create-user.request.dto';
-import { plainToInstance } from 'class-transformer';
-import { CreateUserResponseDto } from './dto/response/create-user.response.dto';
 import { UpdateUserRequestDto } from './dto/request/update-user.request.dto';
+import { CreateUserResponseDto } from './dto/response/create-user.response.dto';
 import { UserResponseDto } from './dto/response/user.response.dto';
+import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
@@ -24,8 +23,7 @@ export class UsersController {
   async create(
     @Body() dto: CreateUserRequestDto,
   ): Promise<CreateUserResponseDto> {
-    const created = await this.usersService.create(dto);
-    return plainToInstance(CreateUserResponseDto, created);
+    return await this.usersService.create(dto);
   }
 
   @Get()
@@ -36,13 +34,13 @@ export class UsersController {
 
   @HttpCode(200)
   @Get(':id')
-  async findById(@Param('id') id: number): Promise<UserResponseDto> {
+  async findById(@Param('id') id: string): Promise<UserResponseDto> {
     return await this.usersService.findOneById(id);
   }
 
   @Patch(':id')
   async update(
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Body() dto: UpdateUserRequestDto,
   ): Promise<UserResponseDto> {
     return await this.usersService.update(id, dto);
@@ -50,7 +48,7 @@ export class UsersController {
 
   @Delete(':id')
   @HttpCode(204)
-  async removeById(@Param('id') id: number): Promise<void> {
+  async removeById(@Param('id') id: string): Promise<void> {
     await this.usersService.remove(id);
   }
 }

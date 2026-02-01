@@ -34,7 +34,7 @@ export class CardService {
     });
   }
 
-  async findOne(id: number): Promise<CardResponseDTO> {
+  async findOne(id: string): Promise<CardResponseDTO> {
     const card = await this.cardRepository.findOneBy({ id });
 
     if (!card) {
@@ -47,7 +47,7 @@ export class CardService {
   }
 
   async update(
-    id: number,
+    id: string,
     dto: UpdateCardRequestDTO,
   ): Promise<UpdateCardResponseDTO> {
     const card = await this.cardRepository.preload({ id, ...dto });
@@ -63,7 +63,7 @@ export class CardService {
     });
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} card`;
   }
 }
