@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, MaxLength, MinLength, IsArray } from 'class-validator';
+import { CardCreatorDTO } from '../response/card-creator.dto';
 
 export class CreateCardRequestDTO {
   @ApiProperty()
@@ -7,6 +8,9 @@ export class CreateCardRequestDTO {
   @MinLength(1, { message: 'Title must be at least 1 character long' })
   @MaxLength(40, { message: 'Title must be at most 40 characters long' })
   type: string;
+
+  @ApiProperty()
+  creator: CardCreatorDTO;
 
   @ApiProperty()
   @IsString({ message: 'Author must be a string' })
