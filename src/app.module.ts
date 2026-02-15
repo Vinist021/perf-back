@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 import { UsersModule } from './resources/users/users.module';
 import { AuthModule } from './resources/auth/auth.module';
 import { CardModule } from './resources/card/card.module';
+import { CaslModule } from './casl/casl.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { CardModule } from './resources/card/card.module';
     UsersModule,
     AuthModule,
     CardModule,
+    CaslModule,
   ],
   controllers: [AppController],
   providers: [AppService],

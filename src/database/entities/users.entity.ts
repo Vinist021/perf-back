@@ -3,7 +3,7 @@ import { AbstractEntity } from './abstract-entity';
 import UserRole from '../enums/roleEnum';
 
 @Entity()
-export class Users extends AbstractEntity {
+export class Users extends AbstractEntity<Users> {
   @Column()
   name: string;
 
