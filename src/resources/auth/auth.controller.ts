@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { LoginRequestDto } from './dto/login.request.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { loginResponseDTO } from './dto/login.response.dto';
+import { Public } from './decorators/public.decorator';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -23,6 +24,7 @@ export class AuthController {
     status: 401,
     description: 'Operação não autorizada',
   })
+  @Public()
   @Post('login')
   async login(@Body() dto: LoginRequestDto) {
     const user = await this.authService.validateUser(dto.email, dto.password);

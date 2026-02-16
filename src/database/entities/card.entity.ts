@@ -10,6 +10,9 @@ export class Card extends AbstractEntity<Card> {
   @Column('jsonb', { nullable: true })
   creator: CardCreatorDTO;
 
+  @Column({ nullable: true })
+  ownerId: string;
+
   @Column()
   author: string;
 

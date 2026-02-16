@@ -9,6 +9,7 @@ import { UpdateCardResponseDTO } from './dto/response/update-card-response.dto';
 import { CardResponseDTO } from './dto/response/card-response.dto';
 import { CreateCardResponseDTO } from './dto/response/create-card-response.dto';
 import { SuccessResponseDTO } from '../../shared/dtos/success-response.dto';
+import { AuthenticatedUser } from '../auth/interfaces/authenticated-user.interface';
 
 @Injectable()
 export class CardService {
@@ -17,8 +18,18 @@ export class CardService {
     private readonly cardRepository: Repository<Card>,
   ) {}
 
-  async create(dto: CreateCardRequestDTO): Promise<CreateCardResponseDTO> {
-    const card = this.cardRepository.create(dto);
+  async create(
+    dto: CreateCardRequestDTO,
+    user: AuthenticatedUser,
+  ): Promise<CreateCardResponseDTO> {
+    const card = this.cardRepository.create({
+      ...dto,
+      ownerId: user.userId,
+      creator: {
+        ownerId: user.userId,
+        name: user.name,
+      },
+    });
 
     const saved = await this.cardRepository.save(card);
 

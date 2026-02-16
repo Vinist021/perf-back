@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { CardService } from './card.service';
 import { CreateCardRequestDTO } from './dto/request/create-card-request.dto';
@@ -16,6 +17,12 @@ import { CreateCardResponseDTO } from './dto/response/create-card-response.dto';
 import { CardResponseDTO } from './dto/response/card-response.dto';
 import { UpdateCardResponseDTO } from './dto/response/update-card-response.dto';
 import { SuccessResponseDTO } from '../../shared/dtos/success-response.dto';
+import { CheckPolicies } from '../../casl/decorators/check-policies.decorator';
+import { PoliciesGuard } from '../../casl/guards/policies.guard';
+import { CardPolicies } from '../../casl/policies/card.policy';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import type { AuthenticatedUser } from '../auth/interfaces/authenticated-user.interface';
+import { CardByIdGuard } from './guards/card-by-id.guard';
 
 @ApiTags('cards')
 @Controller('cards')
@@ -29,9 +36,14 @@ export class CardController {
     type: CreateCardResponseDTO,
   })
   @HttpCode(200)
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies(CardPolicies.create())
   @Post()
-  create(@Body() dto: CreateCardRequestDTO): Promise<CreateCardResponseDTO> {
-    return this.cardService.create(dto);
+  create(
+    @Body() dto: CreateCardRequestDTO,
+    @CurrentUser() user: AuthenticatedUser,
+  ): Promise<CreateCardResponseDTO> {
+    return this.cardService.create(dto, user);
   }
 
   @ApiOperation({ summary: 'Listar todos os cards' })
@@ -41,6 +53,8 @@ export class CardController {
     type: CardResponseDTO,
   })
   @HttpCode(200)
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies(CardPolicies.readAll())
   @Get()
   findAll(): Promise<CardResponseDTO[]> {
     return this.cardService.findAll();
@@ -53,6 +67,8 @@ export class CardController {
     type: CardResponseDTO,
   })
   @HttpCode(200)
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies(CardPolicies.readAll())
   @Get(':id')
   findById(@Param('id') id: string): Promise<CardResponseDTO> {
     return this.cardService.findOne(id);
@@ -65,6 +81,8 @@ export class CardController {
     type: UpdateCardResponseDTO,
   })
   @HttpCode(200)
+  @UseGuards(CardByIdGuard, PoliciesGuard)
+  @CheckPolicies(CardPolicies.updateOwn())
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -80,6 +98,8 @@ export class CardController {
     type: SuccessResponseDTO,
   })
   @HttpCode(200)
+  @UseGuards(CardByIdGuard, PoliciesGuard)
+  @CheckPolicies(CardPolicies.deleteOwn())
   @Delete(':id')
   remove(@Param('id') id: string): Promise<SuccessResponseDTO> {
     return this.cardService.remove(id);
